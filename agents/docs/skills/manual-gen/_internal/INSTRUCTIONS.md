@@ -18,7 +18,7 @@
 
 ## 页面与资源
 
-沿用宿主手册模板。VitePress 站点页面使用 [页面字段](../../docs-agent/_internal/_shared/frontmatter-contract.md)，`doc_type: manual`，`related_code` 指向真实路由或组件。根据实际核对情况记录版本锚或 `unverified`。
+沿用宿主手册模板。VitePress 站点页面使用 [页面字段](_generated/shared-contracts/frontmatter-contract.md)，`doc_type: manual`，`related_code` 指向真实路由或组件。根据实际核对情况记录版本锚或 `unverified`。
 
 截图放在引用页同目录，名称如 `step-1-open-settings.png`，以 `./` 相对路径引用。内置 `prepare-site.mjs` 的 `referencedAssets()` 会处理直接引用资源。更新图片时同步相关步骤和图注。涉及索引、导航和 change-map 时一并维护。
 

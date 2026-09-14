@@ -9,32 +9,17 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CONTRACT_NAMES = (
-    "handoff-contract.md",
-    "closeout-contract.md",
-    "security-escalation.md",
-    "consumption-contract.md",
-)
+CONTRACT_NAMES = ("frontmatter-contract.md",)
 ROUTER_ROOTS = (
-    "agents/engineer/skills/engineer-agent",
-    "agents/qa/skills/qa-agent",
-    "agents/devops/skills/devops-agent",
-    "agents/security/skills/security-agent",
-    "agents/docs/skills/docs-agent",
+    "agents/product_manager/skills/release-management",
+    "agents/docs/skills/docs-site-bootstrap",
+    "agents/docs/skills/manual-gen",
 )
 GENERATED_SUBDIR = Path("_internal/_generated/shared-contracts")
 
 
 def source_root(root: Path = REPO_ROOT) -> Path:
-    return (
-        root
-        / "agents"
-        / "product_manager"
-        / "skills"
-        / "idea-to-spec"
-        / "_internal"
-        / "_shared"
-    )
+    return root / "agents/docs/skills/docs-maintenance/references"
 
 
 def generated_content(name: str, root: Path = REPO_ROOT) -> str:

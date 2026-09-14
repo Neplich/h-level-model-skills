@@ -1,7 +1,7 @@
 {
-  "name": "docs-agent",
+  "name": "h-level-docs",
   "version": "0.6.7",
-  "description": "Documentation sites, product and technical documentation, illustrated manuals, release notes, and accuracy audits grounded in implemented behavior.",
+  "description": "VitePress assets, document contracts and illustrated manuals based on real interfaces.",
   "author": {
     "name": "Neplich"
   }

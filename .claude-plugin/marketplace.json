@@ -1,96 +1,51 @@
 {
-  "name": "dev-agent-skills",
+  "name": "h-level-model-skills",
   "owner": {
     "name": "Neplich"
   },
   "metadata": {
-    "description": "On-demand professional capabilities for product, engineering, QA, operations, security, and documentation. The assistant combines relevant knowledge to complete the user-authorized task.",
+    "description": "Reusable assets and task-specific conventions for highly autonomous models. Derived from dev-agent-skills.",
     "version": "0.6.7"
   },
   "plugins": [
     {
-      "name": "pm-agent",
-      "description": "Product discovery, specifications, feature inventories, research, roadmaps, changelogs, release preparation, and GitHub status. Select these capabilities directly for the requested product task.",
+      "name": "h-level-product",
+      "description": "Reusable specification templates, release management conventions, and Chinese writing guidance.",
       "source": "./agents/product_manager",
       "strict": true,
       "skills": [
-        "./skills/pm-agent",
-        "./skills/idea-to-spec",
-        "./skills/feature-catalog",
-        "./skills/competitive-brief",
-        "./skills/changelog-gen",
-        "./skills/github-release-gen",
-        "./skills/roadmap-gen",
-        "./skills/github-reader",
-        "./skills/human-writing"
+        "./skills/human-writing",
+        "./skills/release-management",
+        "./skills/spec-authoring"
       ]
     },
     {
-      "name": "engineer-agent",
-      "description": "Repository analysis, technical design, implementation, debugging, tests, and Git delivery. Apply these capabilities directly to the requested engineering outcome.",
-      "source": "./agents/engineer",
-      "strict": true,
-      "skills": [
-        "./skills/engineer-agent",
-        "./skills/codebase-analyzer",
-        "./skills/trd-gen",
-        "./skills/feature-implementor",
-        "./skills/test-writer",
-        "./skills/debugger",
-        "./skills/delivery"
-      ]
-    },
-    {
-      "name": "qa-agent",
-      "description": "Exploratory testing, behavior-based acceptance, defect analysis, and regression verification using reproducible evidence and reusable test cases.",
+      "name": "h-level-qa",
+      "description": "Persistent E2E cases, credential references, exploration, acceptance and regression evidence.",
       "source": "./agents/qa",
       "strict": true,
       "skills": [
-        "./skills/qa-agent",
-        "./skills/exploratory-tester",
-        "./skills/spec-based-tester",
-        "./skills/bug-analyzer",
-        "./skills/regression-suite"
+        "./skills/e2e-testing"
       ]
     },
     {
-      "name": "devops-agent",
-      "description": "Deployment design, CI/CD configuration, environment audits, and incident runbooks grounded in the actual application and target environment.",
-      "source": "./agents/devops",
-      "strict": true,
-      "skills": [
-        "./skills/devops-agent",
-        "./skills/deployment-planner",
-        "./skills/cicd-bootstrap",
-        "./skills/env-config-auditor",
-        "./skills/incident-playbook-writer"
-      ]
-    },
-    {
-      "name": "security-agent",
-      "description": "Application security, authorization, dependency risk, and privacy reviews using code evidence, reachability analysis, and actionable findings.",
+      "name": "h-level-security",
+      "description": "Focused application, authorization, dependency and privacy review references.",
       "source": "./agents/security",
       "strict": true,
       "skills": [
-        "./skills/security-agent",
-        "./skills/appsec-checklist",
-        "./skills/authz-reviewer",
-        "./skills/dependency-risk-auditor",
-        "./skills/privacy-surface-mapper"
+        "./skills/security-review"
       ]
     },
     {
-      "name": "docs-agent",
-      "description": "Documentation sites, product and technical documentation, illustrated manuals, release notes, and accuracy audits grounded in implemented behavior.",
+      "name": "h-level-docs",
+      "description": "VitePress assets, document contracts and illustrated manuals based on real interfaces.",
       "source": "./agents/docs",
       "strict": true,
       "skills": [
-        "./skills/docs-agent",
+        "./skills/docs-maintenance",
         "./skills/docs-site-bootstrap",
-        "./skills/formal-docs-sync",
-        "./skills/manual-gen",
-        "./skills/release-notes-gen",
-        "./skills/docs-audit"
+        "./skills/manual-gen"
       ]
     }
   ]

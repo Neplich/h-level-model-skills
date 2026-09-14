@@ -15,7 +15,7 @@ def test_generate_creates_all_expected_files(tmp_path: Path) -> None:
 
     generator.generate(tmp_path)
 
-    assert len(generator.expected_files(tmp_path)) == 20
+    assert len(generator.expected_files(tmp_path)) == 3
     assert generator.freshness_errors(tmp_path) == []
 
 
@@ -39,7 +39,7 @@ def test_freshness_reports_missing_stale_and_extra(tmp_path: Path) -> None:
 def test_generated_copy_declares_source(tmp_path: Path) -> None:
     write_sources(tmp_path)
 
-    content = generator.generated_content("handoff-contract.md", tmp_path)
+    content = generator.generated_content("frontmatter-contract.md", tmp_path)
 
     assert content.startswith("<!-- GENERATED FILE. Source:")
-    assert "idea-to-spec/_internal/_shared/handoff-contract.md" in content
+    assert "docs-maintenance/references/frontmatter-contract.md" in content

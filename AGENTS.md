@@ -1,6 +1,6 @@
 # Repository Instructions
 
-This repository publishes an on-demand professional knowledge library: six plugins and thirty-seven directly usable Skills. Role names organize expertise. The current assistant owns the user's task and combines relevant capabilities through completion.
+This repository publishes an on-demand professional knowledge library: four plugins and eight directly usable Skills. Plugin directories group reusable assets. The current assistant owns the user's task and combines relevant capabilities through completion.
 
 ## Working Approach
 
@@ -13,7 +13,7 @@ Repository Skill content is the product being maintained. Maintain this reposito
 - Plugins live in `agents/{role}/`, with bilingual READMEs and `skills/`.
 - Each `SKILL.md` describes a directly usable capability; `_internal/` and `references/` provide optional detail.
 - `.claude-plugin/marketplace.json`, plugin manifests and `skills-lock.json` describe installation and distribution.
-- Shared references are maintained in `agents/product_manager/skills/idea-to-spec/_internal/_shared/`. Generate their packaged copies with `scripts/generate_shared_contracts.py`.
+- Shared references are maintained in `agents/docs/skills/docs-maintenance/references/`. Generate their packaged copies with `scripts/generate_shared_contracts.py`.
 - `AGENTS.md` is the repository guidance source; `CLAUDE.md` is its relative symlink.
 
 See [architecture](docs/architecture.md), [document guidance](docs/AGENTS.md) and [Skill maintenance](docs/cookbook/maintain-skills.md) for the relevant details.

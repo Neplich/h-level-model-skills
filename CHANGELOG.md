@@ -1,3 +1,7 @@
+# 版本记录
+
+以下已编号记录继承自 dev-agent-skills，描述上游历史版本，不表示本仓库已发布同名版本。本库当前变化见 [迁移清单](docs/migration.md)。
+
 # Changelog
 
 以下记录对应已发布的历史版本。当前源码的使用方式见 [README](./README_zh.md)，完整修改历史可通过 Git 与各版本关联 PR 查阅。
