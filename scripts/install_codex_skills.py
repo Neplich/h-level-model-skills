@@ -14,9 +14,9 @@ from pathlib import Path
 from typing import Any
 
 
-MIRROR_DIR_NAME = ".dev-agent-skills"
-MIRROR_MARKER_NAME = ".dev-agent-skills-mirror.json"
-LEGACY_AGGREGATE_DIR = "dev-agent-skills"
+MIRROR_DIR_NAME = ".h-level-model-skills"
+MIRROR_MARKER_NAME = ".h-level-model-skills-mirror.json"
+LEGACY_AGGREGATE_DIR = "h-level-model-skills"
 PLUGIN_DIR_NAMES = {".claude-plugin", ".codex-plugin"}
 PLUGIN_MANIFESTS = (
     ".claude-plugin/plugin.json",
@@ -236,7 +236,7 @@ def mirror_marker_path(mirror: Path) -> Path:
 
 def write_mirror_marker(root: Path, mirror: Path) -> None:
     marker = {
-        "schema": "dev-agent-skills-codex-mirror",
+        "schema": "h-level-model-skills-codex-mirror",
         "version": 1,
         "source": root.resolve().as_posix(),
     }
@@ -617,7 +617,7 @@ def render_results(
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Install dev-agent-skills for Codex with a hidden mirror and root symlinks."
+        description="Install h-level-model-skills for Codex with a hidden mirror and root symlinks."
     )
     parser.add_argument(
         "--target",

@@ -1,190 +1,45 @@
 {
   "version": 1,
   "skills": {
-    "pm-agent": {
-      "source": "agents/product_manager/skills/pm-agent",
+    "docs-maintenance": {
+      "source": "agents/docs/skills/docs-maintenance",
       "sourceType": "local",
-      "computedHash": "b406e8cf346526165653f0e6cafb60d1f5cc860d35dd5e7b6904c69265e0be90"
+      "computedHash": "83fbb6acba3a2dab4c4c9812d35bcdf6f3be41488550aea4bc18d5546149b855"
     },
-    "idea-to-spec": {
-      "source": "agents/product_manager/skills/idea-to-spec",
+    "docs-site-bootstrap": {
+      "source": "agents/docs/skills/docs-site-bootstrap",
       "sourceType": "local",
-      "computedHash": "f7c3114288dbbd186ffef5067d1a30c48a27ccd773faaf036a0cbad9b88b24b7"
+      "computedHash": "b354abf4ea1f0d3b940a8a6b8e20a552f7a0360f9453167df2d62f23e766f5bd"
     },
-    "feature-catalog": {
-      "source": "agents/product_manager/skills/feature-catalog",
+    "e2e-testing": {
+      "source": "agents/qa/skills/e2e-testing",
       "sourceType": "local",
-      "computedHash": "33c4fb63d215dfa5e8b852c6ff0f58af238681137b529e6da3fb9e24222bd53f"
-    },
-    "competitive-brief": {
-      "source": "agents/product_manager/skills/competitive-brief",
-      "sourceType": "local",
-      "computedHash": "1079e397d596bd1f011ae7169296294f20851c8d1ade87f299b086d554d0b580"
-    },
-    "changelog-gen": {
-      "source": "agents/product_manager/skills/changelog-gen",
-      "sourceType": "local",
-      "computedHash": "c8dd056075fa27fdaa54959525bd0783c31cdf1e72090534407ce130e9787793"
-    },
-    "github-release-gen": {
-      "source": "agents/product_manager/skills/github-release-gen",
-      "sourceType": "local",
-      "computedHash": "8de0d6064b9a6649606ce1242c8ad5224ef4cd5bae26f4913c1aa5107a5e15de"
-    },
-    "release-notes-gen": {
-      "source": "agents/docs/skills/release-notes-gen",
-      "sourceType": "local",
-      "computedHash": "822b57f5e0e30c5e8f0ef8004b83792ad2cb8ce07bbb44b7c37549739208e774"
-    },
-    "roadmap-gen": {
-      "source": "agents/product_manager/skills/roadmap-gen",
-      "sourceType": "local",
-      "computedHash": "603703061bc2beea2292f3822c2127bc1a7781b298a65f3b164c50c816c40c23"
-    },
-    "github-reader": {
-      "source": "agents/product_manager/skills/github-reader",
-      "sourceType": "local",
-      "computedHash": "45548349828c72314cde83aafbddb3bd806a6a1c132b5dbce476de2c8414736f"
+      "computedHash": "ee3c263d5c024f09350df8f1123fc5b8f4863d21bd3213df399a5fbe1e7e71ed"
     },
     "human-writing": {
       "source": "agents/product_manager/skills/human-writing",
       "sourceType": "local",
       "computedHash": "5e57bf1fc7bf5b47207e67f883b9568e21ca59cb9a308948453cf96514801d0f"
     },
-    "engineer-agent": {
-      "source": "agents/engineer/skills/engineer-agent",
-      "sourceType": "local",
-      "computedHash": "31a4ed0e7d16b55f86b2f9c8d374d500da2cbea89b387a83212df7f051b04f5a"
-    },
-    "codebase-analyzer": {
-      "source": "agents/engineer/skills/codebase-analyzer",
-      "sourceType": "local",
-      "computedHash": "555442a939196dc0dcf7944aa7534f2c1ff5cedf67bd4ab6c13954594da2f1fc"
-    },
-    "trd-gen": {
-      "source": "agents/engineer/skills/trd-gen",
-      "sourceType": "local",
-      "computedHash": "fb1427660dab11ab8e0c34a3bfe36932a94fc8838e1f9b0f8f98517bfd5624ee"
-    },
-    "feature-implementor": {
-      "source": "agents/engineer/skills/feature-implementor",
-      "sourceType": "local",
-      "computedHash": "083032713850699e607a4c473b90f84e9ac4dd9cd6006e9e66c5a4a7dd5b0ca6"
-    },
-    "test-writer": {
-      "source": "agents/engineer/skills/test-writer",
-      "sourceType": "local",
-      "computedHash": "fe62b0767ae676a6d8f1d49e0846566bb5a6e21c2492b0660e0e9f2f67d39f6d"
-    },
-    "debugger": {
-      "source": "agents/engineer/skills/debugger",
-      "sourceType": "local",
-      "computedHash": "8472db7c566b98ba4663b5638fe11098dd80e17cbea59cec40e916381a7f47de"
-    },
-    "delivery": {
-      "source": "agents/engineer/skills/delivery",
-      "sourceType": "local",
-      "computedHash": "7814df360abc16571b38df10897314503d1ab2f717af740469b8626d3d07f9f5"
-    },
-    "qa-agent": {
-      "source": "agents/qa/skills/qa-agent",
-      "sourceType": "local",
-      "computedHash": "d7859e98cffbb5c4dc95e8dc0a824c5395a58f65504a9c35e20b73bf47635db7"
-    },
-    "exploratory-tester": {
-      "source": "agents/qa/skills/exploratory-tester",
-      "sourceType": "local",
-      "computedHash": "e974a90b60b88720af1b40526c7ae7e4f5214da1b0f388f685ee0ba10a7f01f4"
-    },
-    "spec-based-tester": {
-      "source": "agents/qa/skills/spec-based-tester",
-      "sourceType": "local",
-      "computedHash": "671aedd0b96f7dc00a229f53fb44bf23e7eec4989caee3ca7751f3c77079a4b6"
-    },
-    "bug-analyzer": {
-      "source": "agents/qa/skills/bug-analyzer",
-      "sourceType": "local",
-      "computedHash": "c782739fc596cc6cef1b8a23b041485b0d94ae5e79ee76e74685f96a534536f5"
-    },
-    "regression-suite": {
-      "source": "agents/qa/skills/regression-suite",
-      "sourceType": "local",
-      "computedHash": "7077ea7be288b401fab6b3a4ec049ccd272b6c108a6c0b789d034857edac882a"
-    },
-    "devops-agent": {
-      "source": "agents/devops/skills/devops-agent",
-      "sourceType": "local",
-      "computedHash": "cff1dea701622b4bdbb60611683250655a5b4841acae749ba9d7a08d107f6830"
-    },
-    "deployment-planner": {
-      "source": "agents/devops/skills/deployment-planner",
-      "sourceType": "local",
-      "computedHash": "32f54354a7b98bb9f5c6ed53143294f24c380099afaf93914bec4b89f1d4218a"
-    },
-    "cicd-bootstrap": {
-      "source": "agents/devops/skills/cicd-bootstrap",
-      "sourceType": "local",
-      "computedHash": "7ba0a47c9145745b0debe14a53366382688bc212cdd46d9ec928dd454dbd1ea7"
-    },
-    "env-config-auditor": {
-      "source": "agents/devops/skills/env-config-auditor",
-      "sourceType": "local",
-      "computedHash": "2ab889c2c13ef0cbaad0740e42cdd9a6d736ab315501df56e64d136ddad75f1b"
-    },
-    "incident-playbook-writer": {
-      "source": "agents/devops/skills/incident-playbook-writer",
-      "sourceType": "local",
-      "computedHash": "b9ed7b3c9d953a3d32749a52eb0b8eb716d4e5bdeea835b4d65e8af624c307fc"
-    },
-    "security-agent": {
-      "source": "agents/security/skills/security-agent",
-      "sourceType": "local",
-      "computedHash": "8f17e4f2232a7544fd14466eaba0280a65114c089edfc54c8c6582a6f6a92374"
-    },
-    "appsec-checklist": {
-      "source": "agents/security/skills/appsec-checklist",
-      "sourceType": "local",
-      "computedHash": "3581ea75479e24c95e50c7e0edb666e0b929b338a5963249a53979de4eb6c72d"
-    },
-    "authz-reviewer": {
-      "source": "agents/security/skills/authz-reviewer",
-      "sourceType": "local",
-      "computedHash": "6354d44b1bf45cdce91d7da94f7b62b5677bc49a4813c9d7434971a6a84ab006"
-    },
-    "dependency-risk-auditor": {
-      "source": "agents/security/skills/dependency-risk-auditor",
-      "sourceType": "local",
-      "computedHash": "5e5602d79b920e95b85e449a82d8c759168f6a5cdb34cdf3646e364b2008839c"
-    },
-    "privacy-surface-mapper": {
-      "source": "agents/security/skills/privacy-surface-mapper",
-      "sourceType": "local",
-      "computedHash": "83defa013fc77c0d0ff6f2c6b5e4f4287a68660446a1eb0ce092a3ae8ef085f0"
-    },
-    "docs-agent": {
-      "source": "agents/docs/skills/docs-agent",
-      "sourceType": "local",
-      "computedHash": "ae7f17436b27261ff8249eea33220181e7c7259cbf85e5c7637e529fef49a2d6"
-    },
-    "docs-site-bootstrap": {
-      "source": "agents/docs/skills/docs-site-bootstrap",
-      "sourceType": "local",
-      "computedHash": "a3389d4d638b657c954835e611ff81d1b9877378a7cbc89b86bba81620c8504a"
-    },
-    "formal-docs-sync": {
-      "source": "agents/docs/skills/formal-docs-sync",
-      "sourceType": "local",
-      "computedHash": "7710b4eeb42dd78bb618d7bdb6f9ef7628251ea7dd3ca9daaf44fbbd7b9adc69"
-    },
     "manual-gen": {
       "source": "agents/docs/skills/manual-gen",
       "sourceType": "local",
-      "computedHash": "bcfef10fbd2f02ad1dc6ff4880445b2ece3fec1939128818f146717e4a6d2d54"
+      "computedHash": "6d81b565cf084b217cb803dc50f0bbf610bf3b04bd90d905e7f216b7089b416a"
     },
-    "docs-audit": {
-      "source": "agents/docs/skills/docs-audit",
+    "release-management": {
+      "source": "agents/product_manager/skills/release-management",
       "sourceType": "local",
-      "computedHash": "a7585134c5dfcb18f3c9060452e615c917f7416c3c54a045be5292a55ad2f6b2"
+      "computedHash": "cc5d685298f792bd0e208117184c52a775e54c268f17e6ee319f0e1d6acaf9cf"
+    },
+    "security-review": {
+      "source": "agents/security/skills/security-review",
+      "sourceType": "local",
+      "computedHash": "8f6648e728d219c79de5f2cb953f077608d5cc3b596cc6c392de8b21d34450ff"
+    },
+    "spec-authoring": {
+      "source": "agents/product_manager/skills/spec-authoring",
+      "sourceType": "local",
+      "computedHash": "463b3ab464ba44f3192f2a0d4d9cc3410ab999ca8adc0c54a176fb0567d1addf"
     }
   }
 }

@@ -1,6 +1,6 @@
 # 文档站安装与更新
 
-内置静态资产位于 `assets/docs/site/`，目标根为 `docs/site/`。按下方映射复制文件，并根据本次结果生成 `.meta/bootstrap-manifest.json`。页面和脚本共同使用 [页面字段](../../docs-agent/_internal/_shared/frontmatter-contract.md)。
+内置静态资产位于 `assets/docs/site/`，目标根为 `docs/site/`。按下方映射复制文件，并根据本次结果生成 `.meta/bootstrap-manifest.json`。页面和脚本共同使用 [页面字段](_generated/shared-contracts/frontmatter-contract.md)。
 
 ## 文件与 manifest
 

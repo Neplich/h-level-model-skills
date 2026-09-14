@@ -1,6 +1,6 @@
-# Product Manager Agent
+# Product, Specifications and Releases
 
-`pm-agent` helps select methods for product manager agent work. The plugin provides 9 directly usable skills for the specialist tasks below. The assistant combines this knowledge to complete the requested outcome.
+This plugin provides three skills for specification templates, release conventions, and Chinese writing preferences. Use them independently or together in a design, documentation, or release task.
 
 > [!NOTE]
 > [Architecture](../../docs/architecture.md) · [Documentation Guide](../../docs/AGENTS.md) · [中文](./README_zh.md)
@@ -9,117 +9,69 @@
 
 | Item | Details |
 | --- | --- |
-| Role guide | `pm-agent` |
-| Specialist and composition skills | 8 |
-| Main inputs | User ideas, product context, repository evidence, issues, PRs, milestones, and releases |
-| Main outputs | Requirements, feature inventories, research, roadmaps, changelogs, release content, and clear prose |
+| Plugin | `h-level-product` |
+| Skills | 3 |
+| Main inputs | Requirements, existing specifications, code, tests, tags, commits, and PRs |
+| Main outputs | PRD/TRD/API/ADR, test specifications, release content, and reader-facing prose |
 
 ## Skills
 
-| Skill | When to use | Main output |
+| Skill | When to use | Main artifact or resource |
 | --- | --- | --- |
-| [pm-agent](./skills/pm-agent/SKILL.md) | Product capability guide | Selected methods and product outcome |
-| [idea-to-spec](./skills/idea-to-spec/SKILL.md) | Requirements and acceptance criteria | Requirements, PRD, decision notes |
-| [feature-catalog](./skills/feature-catalog/SKILL.md) | Feature catalogs from existing projects | Feature inventory and evidence map |
-| [competitive-brief](./skills/competitive-brief/SKILL.md) | Competitive research and positioning | Comparison, positioning, opportunities |
-| [changelog-gen](./skills/changelog-gen/SKILL.md) | Developer changelogs | Versioned developer changelog |
-| [github-release-gen](./skills/github-release-gen/SKILL.md) | GitHub Release preparation and publication | Release content, draft, authorized publication |
-| [roadmap-gen](./skills/roadmap-gen/SKILL.md) | Roadmaps and milestones | Milestones, priorities, roadmap |
-| [github-reader](./skills/github-reader/SKILL.md) | GitHub project status | Issue/PR/milestone status with sources |
-| [human-writing](./skills/human-writing/SKILL.md) | Natural, reader-oriented writing | Clear, natural reader-facing prose |
+| [spec-authoring](./skills/spec-authoring/SKILL.md) | Maintained specifications or a requested format | Templates, state fields, and feature paths |
+| [release-management](./skills/release-management/SKILL.md) | Version changes and release preparation | Changelogs, site notes, and GitHub Releases |
+| [human-writing](./skills/human-writing/SKILL.md) | Chinese writing and revision | Clear prose and document organization |
 
 ## Choosing a Capability
 
-- Use `idea-to-spec` for product goals, scope, acceptance criteria, and useful specifications.
-- Use `feature-catalog` to map implemented capabilities before planning changes.
-- Use `competitive-brief` for positioning and comparisons, and `roadmap-gen` for priorities and milestones.
-- Use `github-reader` for repository state, `changelog-gen` for version changes, and `github-release-gen` for release preparation or authorized publication.
-- Use `human-writing` to make reader-facing material clear and natural.
+- Choose `spec-authoring` for maintained specifications, loading only the PRD, TRD, API, ADR, or test template needed.
+- Choose `release-management` for versioned changes or publication content based on one verified scope.
+- Choose `human-writing` for Chinese prose while preserving terms, formats, practical detail, and writing preferences.
 
 ## Installation and Use
 
 ```text
-/plugin marketplace add Neplich/dev-agent-skills
-/plugin install pm-agent@dev-agent-skills
+/plugin marketplace add Neplich/h-level-model-skills
+/plugin install h-level-product@h-level-model-skills
 ```
 
-For Codex personal and project installations, see the [installation guide](../../docs/README.codex.md). From the repository root, install all capabilities into the selected target:
+See the [Codex Guide](../../docs/README.codex.md) for personal and project installs. From the repository root, install all eight skills into the selected target:
 
 ```bash
 python3 scripts/install_codex_skills.py --target /path/to/skills
 ```
 
-Describe the goal directly or select a skill through the host, for example:
+Describe the goal or choose a skill through the host, for example:
 
 ```text
-/idea-to-spec "Define a useful first version of a team task manager."
+Use spec-authoring to document the bulk export API contract and migration design.
+Use release-management to prepare a changelog and a preview of the next release.
+Use human-writing to restore the Chinese installation guide’s structure and practical steps.
 ```
 
 ## Inputs and Artifacts
 
-Use a stable feature path when a product specification will be maintained. A PRD explains the problem, users, behavior, and acceptance criteria; a decision record captures the chosen direction and relevant rationale. Roadmaps and release communication use actual issue and version evidence.
+Specifications follow the host format first; the defaults provide document states, relationship fields, and stable feature paths. Release artifacts share a commit or tag scope and use channel-specific presentation.
 
-For durable artifacts, use the project’s existing locations or adapt this layout:
+For durable artifacts, use existing project locations or adapt this layout, creating only the files needed for the task:
 
 ```text
-docs/pm/{feature}/
-  PRD.md
-  DECISIONS.md
-docs/roadmap.md
+docs/pm/{feature}/PRD.md
+docs/engineer/{feature}/TRD.md
+docs/engineer/{feature}/API.md
 docs/changelog/changelog-v{version}.md
 ```
 
-Choose the useful files for the task. Existing documents, code, and tests jointly support expectations and verification.
+## Verification
 
-## Selecting the Product Artifact
-
-| Need | Useful artifact |
-| --- | --- |
-| Decide what to build | Problem, users, scope, alternatives, acceptance criteria |
-| Understand an existing system | Evidence-linked feature inventory and gaps |
-| Compare market approaches | Sourced comparison, positioning, opportunities |
-| Communicate priorities | Roadmap tied to actual milestones and issues |
-| Explain a release | Themed changes, compatibility, upgrade actions, source links |
-
-GitHub summaries retain source links, capture dates, pagination, and incomplete
-result notices. Version summaries use a verified reachable commit range.
-Reader-facing documents preserve exact names, interfaces, and commands while
-organizing the material around the reader's task.
-
-[idea-to-spec resources](./skills/idea-to-spec/README.md) provide generation,
-revision, analysis, and validation references that can be selected independently.
-
-## Typical Workflow
-
-Understand the goal → inspect evidence → shape the useful artifact → verify facts → continue the task
-
-```mermaid
-flowchart LR
-    Context["Task and evidence"] --> Work["pm-agent"]
-    Work --> S0["idea-to-spec"]
-    S0 --> Result["Outcome and verification"]
-    Work --> S1["feature-catalog"]
-    S1 --> Result["Outcome and verification"]
-    Work --> S2["competitive-brief"]
-    S2 --> Result["Outcome and verification"]
-    Work --> S3["changelog-gen"]
-    S3 --> Result["Outcome and verification"]
-    Work --> S4["github-release-gen"]
-    S4 --> Result["Outcome and verification"]
-    Work --> S5["roadmap-gen"]
-    S5 --> Result["Outcome and verification"]
-    Work --> S6["github-reader"]
-    S6 --> Result["Outcome and verification"]
-    Work --> S7["human-writing"]
-    S7 --> Result["Outcome and verification"]
-```
+Check GitHub tags, prerelease, and latest separately. Text previews, drafts, and published releases are distinct outcomes; version metadata records actual versions and verification.
 
 ## Combining Capabilities
 
-Product knowledge can be combined with design, engineering, testing, operations, security, and documentation in the same task. Use `docs-agent:release-notes-gen` for versioned site pages and `github-release-gen` for the GitHub release surface.
+Combine with E2E for runtime acceptance and Docs for site fact updates. `human-writing` can also revise Chinese artifacts produced using other plugins.
 
-The assistant continues within existing authorization and identifies concrete decisions when a material product choice or additional operation permission is needed.
+The assistant keeps the task’s scope and authorization while combining relevant references. See the [repository README](../../README.md) for other plugins.
 
 ## Local Maintenance
 
-Capability sources live under `skills/` in this directory. Update relevant descriptions and installation data with content changes; see the [maintenance guide](../../docs/cookbook/maintain-skills.md) for verification.
+Skill sources live under `skills/`. Synchronize descriptions, registration, and the lockfile after changes; see the [maintenance guide](../../docs/cookbook/maintain-skills.md) for checks.

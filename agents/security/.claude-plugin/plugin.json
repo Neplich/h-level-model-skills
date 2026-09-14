@@ -1,7 +1,7 @@
 {
-  "name": "security-agent",
+  "name": "h-level-security",
   "version": "0.6.7",
-  "description": "Application security, authorization, dependency risk, and privacy reviews using code evidence, reachability analysis, and actionable findings.",
+  "description": "Focused application, authorization, dependency and privacy review references.",
   "author": {
     "name": "Neplich"
   }

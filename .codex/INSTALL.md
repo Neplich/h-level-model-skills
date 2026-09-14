@@ -1,4 +1,4 @@
-# Installing Dev Agent Skills for Codex
+# Installing H-Level Model Skills for Codex
 
 Install this repository into Codex with a hidden mirror and root-level relative
 skill symlinks. Use the installer to maintain those relative symlinks.
@@ -7,13 +7,13 @@ skill symlinks. Use the installer to maintain those relative symlinks.
 
 Use the installation scope specified by the user or established in context. If it is unresolved, ask whether the skills should be available in this project or across projects.
 
-The install includes all thirty-seven skills across six professional categories. Every skill is directly usable. The assistant selects relevant methods for the user's goal and continues within existing authorization.
+The install includes all eight skills across four plugin categories. Every skill is directly usable. The assistant selects relevant methods for the user's goal and continues within existing authorization.
 
 ## Mirror Layout
 
 Codex resolves skill symlinks to their real paths when discovering plugin metadata. The repository keeps `agents/{role}/.claude-plugin/plugin.json` files for Claude marketplace compatibility.
 
-The installer copies the `agents/` tree into `$SKILL_ROOT/.dev-agent-skills/`, with professional references included and plugin manifests and test directories excluded. It creates relative symlinks such as `$SKILL_ROOT/pm-agent -> .dev-agent-skills/agents/product_manager/skills/pm-agent`. This layout exposes each skill once under its own name and preserves relative references.
+The installer copies the `agents/` tree into `$SKILL_ROOT/.h-level-model-skills/`, with professional references included and plugin manifests and test directories excluded. It creates relative symlinks such as `$SKILL_ROOT/human-writing -> .h-level-model-skills/agents/product_manager/skills/human-writing`. This layout exposes each skill once under its own name and preserves relative references.
 
 ## Installation Steps
 
@@ -22,7 +22,7 @@ The installer copies the `agents/` tree into `$SKILL_ROOT/.dev-agent-skills/`, w
 For a personal install:
 
 ```bash
-CLONE_ROOT="$HOME/.agents/dev-agent-skills"
+CLONE_ROOT="$HOME/.agents/h-level-model-skills"
 SKILL_ROOT="$HOME/.agents/skills"
 ```
 
@@ -32,18 +32,18 @@ For a project install, run from the project root:
 
 ```bash
 PROJECT_ROOT="$PWD"
-CLONE_ROOT="$PROJECT_ROOT/.agents/dev-agent-skills"
+CLONE_ROOT="$PROJECT_ROOT/.agents/h-level-model-skills"
 SKILL_ROOT="$PROJECT_ROOT/.agents/skills"
 ```
 
 ### 2. Clone Or Update The Repository
 
-Set `TARGET_TAG` to a release tag (for example `v0.5.1`) when this install
+Set `TARGET_TAG` to a release tag (only when that tag exists in this repository) when this install
 must match a specific released version, as the Release upgrade instructions
 do. Omit it for a plain latest install.
 
 ```bash
-REPO_URL="https://github.com/Neplich/dev-agent-skills.git"
+REPO_URL="https://github.com/Neplich/h-level-model-skills.git"
 if [ -d "$CLONE_ROOT/.git" ]; then
   if [ -n "$(git -C "$CLONE_ROOT" status --porcelain)" ]; then
     echo "error: $CLONE_ROOT has uncommitted or untracked changes; commit or stash them before installing" >&2
@@ -90,18 +90,11 @@ Default all skills:
 python3 "$CLONE_ROOT/scripts/install_codex_skills.py" --target "$SKILL_ROOT"
 ```
 
-The installer owns only two target shapes:
-
-- symlinks whose resolved path is inside `$SKILL_ROOT/.dev-agent-skills/`
-- symlinks whose resolved path is inside a dev-agent-skills checkout, detected
-  by an ancestor `.claude-plugin/marketplace.json` with `name:
-  dev-agent-skills`
-
-Owned symlinks are replaced automatically. On upgrade, obsolete aliases pointing into the managed mirror are removed when their skills are no longer registered. Older clone symlink installs are
-migrated to hidden mirror symlinks. A legacy aggregate
-`$SKILL_ROOT/dev-agent-skills` entry is removed before install when it is owned
-by the same rule, or when a real directory contains a dev-agent-skills
-marketplace file. Unowned aggregate entries are reported and left unchanged.
+The installer manages its own marker-bearing hidden mirror and symlinks resolving
+inside that mirror. Unregistered aliases pointing into this mirror are removed
+on update. Legacy aggregate entries are migrated only when marked as owned.
+Symlinks into other checkouts or the original dev-agent-skills mirror are
+unowned and preserved. Installing this library does not uninstall the original.
 
 Real directories and symlinks to other locations are preserved and reported as skipped. With `--force`, they are reported as
 conflicts and the installer exits before rebuilding the mirror or changing any
@@ -123,7 +116,7 @@ to `~/.codex/config.toml`:
 
 ```toml
 [[skills.config]]
-path = "/Users/you/.agents/skills/debugger"
+path = "/Users/you/.agents/skills/e2e-testing"
 enabled = false
 ```
 

@@ -1,7 +1,7 @@
 {
-  "name": "qa-agent",
+  "name": "h-level-qa",
   "version": "0.6.7",
-  "description": "Exploratory testing, behavior-based acceptance, defect analysis, and regression verification using reproducible evidence and reusable test cases.",
+  "description": "Persistent E2E cases, credential references, exploration, acceptance and regression evidence.",
   "author": {
     "name": "Neplich"
   }

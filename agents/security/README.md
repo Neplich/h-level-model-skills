@@ -1,6 +1,6 @@
-# Security Agent
+# Security and Privacy Review
 
-`security-agent` helps select methods for security agent work. The plugin provides 5 directly usable skills for the specialist tasks below. The assistant combines this knowledge to complete the requested outcome.
+This plugin provides `security-review`, loading application, authorization, dependency, or privacy references for the requested surface. It applies to explicit security and privacy review tasks.
 
 > [!NOTE]
 > [Architecture](../../docs/architecture.md) · [Documentation Guide](../../docs/AGENTS.md) · [中文](./README_zh.md)
@@ -9,100 +9,57 @@
 
 | Item | Details |
 | --- | --- |
-| Role guide | `security-agent` |
-| Specialist and composition skills | 4 |
-| Main inputs | Code, entry points, trust boundaries, dependency locks, configuration, and findings |
-| Main outputs | Evidence-backed findings, impact assessments, remediation, and verification |
+| Plugin | `h-level-security` |
+| Skills | 1 |
+| Main inputs | Review scope, code, configuration, resolved dependencies, identities, permissions, and data flows |
+| Main outputs | Code evidence, permission matrices, dependency applicability, and data lifecycle maps |
 
 ## Skills
 
-| Skill | When to use | Main output |
+| Skill | When to use | Main artifact or resource |
 | --- | --- | --- |
-| [security-agent](./skills/security-agent/SKILL.md) | Security capability guide | Review scope and actionable findings |
-| [appsec-checklist](./skills/appsec-checklist/SKILL.md) | Application security review | Reachable application-security findings |
-| [authz-reviewer](./skills/authz-reviewer/SKILL.md) | Identity and authorization review | Permission matrix and access findings |
-| [dependency-risk-auditor](./skills/dependency-risk-auditor/SKILL.md) | Dependency risk review | Advisory applicability and upgrade guidance |
-| [privacy-surface-mapper](./skills/privacy-surface-mapper/SKILL.md) | Privacy and data-flow mapping | Data inventory, flow map, handling gaps |
+| [security-review](./skills/security-review/SKILL.md) | Explicit security or privacy reviews | Surface-specific checklists and findings |
 
 ## Choosing a Capability
 
-- Use `appsec-checklist` for input handling, sensitive sinks, uploads, remote requests, secrets, and configuration.
-- Use `authz-reviewer` for identity, sessions, roles, object ownership, and tenant isolation.
-- Use `dependency-risk-auditor` for resolved versions, advisories, reachability, maintenance, and provenance.
-- Use `privacy-surface-mapper` for collection, storage, sharing, retention, deletion, and user controls.
+- Use AppSec references for input, execution, and output boundaries, tracing reachable paths and defenses.
+- Use authorization references for identity, object permissions, and tenant isolation matrices.
+- Dependency reviews check resolved versions, advisories, and applicability; privacy reviews trace collection, sharing, retention, and deletion.
 
 ## Installation and Use
 
 ```text
-/plugin marketplace add Neplich/dev-agent-skills
-/plugin install security-agent@dev-agent-skills
+/plugin marketplace add Neplich/h-level-model-skills
+/plugin install h-level-security@h-level-model-skills
 ```
 
-For Codex personal and project installations, see the [installation guide](../../docs/README.codex.md). From the repository root, install all capabilities into the selected target:
+See the [Codex Guide](../../docs/README.codex.md) for personal and project installs. From the repository root, install all eight skills into the selected target:
 
 ```bash
 python3 scripts/install_codex_skills.py --target /path/to/skills
 ```
 
-Describe the goal directly or select a skill through the host, for example:
+Describe the goal or choose a skill through the host, for example:
 
 ```text
-/authz-reviewer "Check whether ordinary users can access another tenant’s exports."
+Use security-review to inspect object permissions and cross-tenant access in admin exports.
+Use security-review to trace personal data, caches, and external processors after account deletion.
 ```
 
 ## Inputs and Artifacts
 
-A useful finding names the location, attacker preconditions, reachable path, existing defenses, impact, and correction. Severity reflects demonstrated conditions and assets; confidence reflects evidence quality. Protect sensitive values and use sanitized reproductions.
+Each finding retains its location, preconditions, defenses, concrete impact, and repair direction. Organize the report around the reviewed surface; prefer an existing dedicated security workflow when the host provides one.
 
-For durable artifacts, use the project’s existing locations or adapt this layout:
+## Verification
 
-```text
-docs/security/{feature}/
-  appsec-checklist.md
-  authz-review.md
-  dependency-audit.md
-  privacy-map.md
-```
-
-Choose the useful files for the task. Existing documents, code, and tests jointly support expectations and verification.
-
-## Review Evidence
-
-| Review | Evidence to preserve |
-| --- | --- |
-| Application security | Controlled input, transformations, sensitive sink, defenses |
-| Authorization | Principal, action, resource, ownership/tenant context, enforcement |
-| Dependencies | Resolved version, advisory date, affected range, runtime use |
-| Privacy | Data category, purpose, storage/recipient, retention/deletion, source |
-
-Reports identify reviewed scope, confirmed findings, hypotheses, and unavailable
-evidence. Remediation guidance names the responsible path and a concrete
-verification. A review can be useful even when it finds no actionable defect;
-its conclusion still describes the scope actually inspected.
-
-## Typical Workflow
-
-Define surface → trace evidence → validate impact → report or remediate → verify
-
-```mermaid
-flowchart LR
-    Context["Task and evidence"] --> Work["security-agent"]
-    Work --> S0["appsec-checklist"]
-    S0 --> Result["Outcome and verification"]
-    Work --> S1["authz-reviewer"]
-    S1 --> Result["Outcome and verification"]
-    Work --> S2["dependency-risk-auditor"]
-    S2 --> Result["Outcome and verification"]
-    Work --> S3["privacy-surface-mapper"]
-    S3 --> Result["Outcome and verification"]
-```
+Distinguish advisory severity from demonstrated application impact. Record evidence gaps for unverified paths; legal conclusions require current authoritative requirements for the applicable jurisdiction. Ordinary login or dependency changes do not automatically trigger repository-wide audits.
 
 ## Combining Capabilities
 
-Combine review with requested code, dependency, configuration, and documentation changes. Verify legitimate behavior alongside the repaired failure mode. Distinguish technical observations from legal interpretation when reviewing privacy obligations.
+Findings can guide authorized implementation, regression, and documentation. Use e2e-testing for persistent runtime evidence and Docs for interface or data-handling documentation.
 
-The assistant continues within existing authorization and identifies concrete decisions when a material product choice or additional operation permission is needed.
+The assistant keeps the task’s scope and authorization while combining relevant references. See the [repository README](../../README.md) for other plugins.
 
 ## Local Maintenance
 
-Capability sources live under `skills/` in this directory. Update relevant descriptions and installation data with content changes; see the [maintenance guide](../../docs/cookbook/maintain-skills.md) for verification.
+Skill sources live under `skills/`. Synchronize descriptions, registration, and the lockfile after changes; see the [maintenance guide](../../docs/cookbook/maintain-skills.md) for checks.

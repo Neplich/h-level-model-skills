@@ -9,8 +9,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INSTALLER = ROOT / "scripts" / "install_codex_skills.py"
 MARKETPLACE = ROOT / ".claude-plugin" / "marketplace.json"
-MIRROR_DIR = ".dev-agent-skills"
-MIRROR_MARKER = ".dev-agent-skills-mirror.json"
+MIRROR_DIR = ".h-level-model-skills"
+MIRROR_MARKER = ".h-level-model-skills-mirror.json"
 
 
 def run_installer(target: Path, *args: str) -> subprocess.CompletedProcess[str]:
@@ -26,7 +26,7 @@ def run_installer(target: Path, *args: str) -> subprocess.CompletedProcess[str]:
 def write_dev_agent_marketplace_marker(root: Path) -> None:
     (root / ".claude-plugin").mkdir(parents=True, exist_ok=True)
     (root / ".claude-plugin/marketplace.json").write_text(
-        json.dumps({"name": "dev-agent-skills"}),
+        json.dumps({"name": "h-level-model-skills"}),
         encoding="utf-8",
     )
 
@@ -35,20 +35,20 @@ def make_minimal_checkout(root: Path) -> None:
     (root / "scripts").mkdir(parents=True)
     shutil.copy2(INSTALLER, root / "scripts" / "install_codex_skills.py")
     (root / ".claude-plugin").mkdir()
-    (root / "agents/product_manager/skills/pm-agent").mkdir(parents=True)
-    (root / "agents/product_manager/skills/pm-agent/SKILL.md").write_text(
-        "---\nname: pm-agent\n---\n",
+    (root / "agents/product_manager/skills/human-writing").mkdir(parents=True)
+    (root / "agents/product_manager/skills/human-writing/SKILL.md").write_text(
+        "---\nname: human-writing\n---\n",
         encoding="utf-8",
     )
     (root / ".claude-plugin/marketplace.json").write_text(
         json.dumps(
             {
-                "name": "dev-agent-skills",
+                "name": "h-level-model-skills",
                 "plugins": [
                     {
                         "name": "pm-agent",
                         "source": "./agents/product_manager",
-                        "skills": ["./skills/pm-agent"],
+                        "skills": ["./skills/human-writing"],
                     }
                 ],
             }
@@ -130,28 +130,14 @@ def test_default_install_creates_hidden_mirror_and_relative_skill_symlinks(tmp_p
     assert scanned_skill_entries(target) == marketplace_skill_names()
     assert (target / MIRROR_DIR / "agents").is_dir()
     marker = json.loads((target / MIRROR_DIR / MIRROR_MARKER).read_text(encoding="utf-8"))
-    assert marker["schema"] == "dev-agent-skills-codex-mirror"
+    assert marker["schema"] == "h-level-model-skills-codex-mirror"
     assert marker["version"] == 1
     assert marker["source"] == ROOT.resolve().as_posix()
-    assert_relative_mirror_link(target, "pm-agent")
-    assert_relative_mirror_link(target, "debugger")
-    assert_relative_mirror_link(target, "github-release-gen")
-    assert_relative_mirror_link(target, "release-notes-gen")
-    assert skill_source_rel("github-release-gen") == Path(
-        "agents/product_manager/skills/github-release-gen"
-    )
-    assert skill_source_rel("release-notes-gen") == Path(
-        "agents/docs/skills/release-notes-gen"
-    )
+    for name in marketplace_skill_names():
+        assert_relative_mirror_link(target, name)
+        assert (target / name / "SKILL.md").read_bytes() == (ROOT / skill_source_rel(name) / "SKILL.md").read_bytes()
+    assert len(marketplace_skill_names()) == 8
     assert "Qualified aliases for colliding skill names:" not in result.stdout
-    assert (
-        target
-        / MIRROR_DIR
-        / "agents/product_manager/skills/github-release-gen/SKILL.md"
-    ).is_file()
-    assert (
-        target / MIRROR_DIR / "agents/docs/skills/release-notes-gen/SKILL.md"
-    ).is_file()
 
 
 def test_duplicate_skill_basename_within_one_plugin_is_rejected(tmp_path: Path) -> None:
@@ -299,7 +285,7 @@ def test_upgrade_removes_obsolete_managed_qualified_aliases(tmp_path: Path) -> N
     )
     shutil.rmtree(checkout / "agents/product_manager/skills/release-notes-gen")
     marketplace["plugins"][0]["skills"] = [
-        "./skills/pm-agent",
+        "./skills/human-writing",
         "./skills/github-release-gen",
     ]
     marketplace_path.write_text(json.dumps(marketplace), encoding="utf-8")
@@ -384,7 +370,7 @@ def test_reinstall_removes_dangling_obsolete_mirror_symlink(tmp_path: Path) -> N
     assert not obsolete.is_symlink()
 
 
-def test_default_install_upgrades_managed_routers_only_layout_to_all_skills(
+def test_default_install_restores_missing_managed_skill_links(
     tmp_path: Path,
 ) -> None:
     target = tmp_path / "skills"
@@ -392,11 +378,11 @@ def test_default_install_upgrades_managed_routers_only_layout_to_all_skills(
     first = run_installer(target)
     assert first.returncode == 0, first.stderr + first.stdout
 
-    router_names = sorted(plugin["name"] for plugin in marketplace_data()["plugins"])
+    retained_names = ["e2e-testing", "human-writing"]
     for entry in target.iterdir():
-        if entry.is_symlink() and entry.name not in router_names:
+        if entry.is_symlink() and entry.name not in retained_names:
             entry.unlink()
-    assert scanned_skill_entries(target) == router_names
+    assert scanned_skill_entries(target) == retained_names
 
     second = run_installer(target)
 
@@ -415,7 +401,7 @@ def test_idempotent_reinstall_rebuilds_stale_hidden_mirror(tmp_path: Path) -> No
     second = run_installer(target)
 
     assert second.returncode == 0, second.stderr + second.stdout
-    assert "updated: pm-agent" in second.stdout
+    assert "updated: human-writing" in second.stdout
     assert not stale.exists()
     assert (target / MIRROR_DIR / MIRROR_MARKER).is_file()
     assert scanned_skill_entries(target) == marketplace_skill_names()
@@ -426,13 +412,13 @@ def test_force_rebuilds_mirror_and_replaces_owned_links(tmp_path: Path) -> None:
 
     first = run_installer(target)
     assert first.returncode == 0, first.stderr + first.stdout
-    skill_file = target / MIRROR_DIR / skill_source_rel("pm-agent") / "SKILL.md"
+    skill_file = target / MIRROR_DIR / skill_source_rel("human-writing") / "SKILL.md"
     skill_file.write_text("stale", encoding="utf-8")
 
     second = run_installer(target, "--force")
 
     assert second.returncode == 0, second.stderr + second.stdout
-    assert "replaced: pm-agent" in second.stdout
+    assert "replaced: human-writing" in second.stdout
     assert (target / MIRROR_DIR / MIRROR_MARKER).is_file()
     assert skill_file.read_text(encoding="utf-8").startswith("---")
 
@@ -452,7 +438,7 @@ def test_unowned_hidden_mirror_directory_errors_without_partial_changes(tmp_path
         assert sentinel.read_text(encoding="utf-8") == "keep"
         assert mirror.is_dir()
         assert not (mirror / MIRROR_MARKER).exists()
-        assert not (target / "pm-agent").exists()
+        assert not (target / "human-writing").exists()
 
 
 def test_unowned_hidden_mirror_symlink_errors_without_deleting_target(tmp_path: Path) -> None:
@@ -472,26 +458,26 @@ def test_unowned_hidden_mirror_symlink_errors_without_deleting_target(tmp_path: 
     assert mirror.is_symlink()
     assert mirror.resolve(strict=True) == custom_checkout
     assert sentinel.read_text(encoding="utf-8") == "keep"
-    assert not (target / "pm-agent").exists()
+    assert not (target / "human-writing").exists()
 
 
 def test_unowned_selected_directory_is_skipped_without_force(tmp_path: Path) -> None:
     target = tmp_path / "skills"
-    unowned = target / "pm-agent"
+    unowned = target / "human-writing"
     unowned.mkdir(parents=True)
     (unowned / "SKILL.md").write_text("user skill", encoding="utf-8")
 
     result = run_installer(target)
 
     assert result.returncode == 0, result.stderr + result.stdout
-    assert "skipped: pm-agent" in result.stdout
+    assert "skipped: human-writing" in result.stdout
     assert (unowned / "SKILL.md").read_text(encoding="utf-8") == "user skill"
     assert not unowned.is_symlink()
 
 
 def test_force_errors_on_unowned_selected_directory_without_partial_changes(tmp_path: Path) -> None:
     target = tmp_path / "skills"
-    unowned = target / "pm-agent"
+    unowned = target / "human-writing"
     unowned.mkdir(parents=True)
     (unowned / "SKILL.md").write_text("user skill", encoding="utf-8")
 
@@ -508,31 +494,31 @@ def test_unmanaged_checkout_symlink_for_selected_skill_is_preserved(tmp_path: Pa
     target.mkdir(parents=True)
     old_checkout = tmp_path / "old-checkout"
     write_dev_agent_marketplace_marker(old_checkout)
-    checkout_target = old_checkout / skill_source_rel("debugger")
+    checkout_target = old_checkout / skill_source_rel("e2e-testing")
     checkout_target.mkdir(parents=True)
-    (target / "debugger").symlink_to(checkout_target, target_is_directory=True)
+    (target / "e2e-testing").symlink_to(checkout_target, target_is_directory=True)
 
     result = run_installer(target)
 
     assert result.returncode == 0, result.stderr + result.stdout
-    assert "skipped: debugger" in result.stdout
-    assert (target / "debugger").is_symlink()
-    assert (target / "debugger").resolve(strict=True) == checkout_target
-    assert (target / MIRROR_DIR / skill_source_rel("debugger") / "SKILL.md").is_file()
+    assert "skipped: e2e-testing" in result.stdout
+    assert (target / "e2e-testing").is_symlink()
+    assert (target / "e2e-testing").resolve(strict=True) == checkout_target
+    assert (target / MIRROR_DIR / skill_source_rel("e2e-testing") / "SKILL.md").is_file()
 
 
 def test_selected_source_checkout_symlink_is_preserved(tmp_path: Path) -> None:
     target = tmp_path / "skills"
     target.mkdir(parents=True)
-    checkout_target = ROOT / skill_source_rel("debugger")
-    (target / "debugger").symlink_to(checkout_target, target_is_directory=True)
+    checkout_target = ROOT / skill_source_rel("e2e-testing")
+    (target / "e2e-testing").symlink_to(checkout_target, target_is_directory=True)
 
     result = run_installer(target)
 
     assert result.returncode == 0, result.stderr + result.stdout
-    assert "skipped: debugger" in result.stdout
-    assert (target / "debugger").is_symlink()
-    assert (target / "debugger").resolve(strict=True) == checkout_target
+    assert "skipped: e2e-testing" in result.stdout
+    assert (target / "e2e-testing").is_symlink()
+    assert (target / "e2e-testing").resolve(strict=True) == checkout_target
     assert checkout_target.is_dir()
     assert (checkout_target / "SKILL.md").is_file()
     assert INSTALLER.is_file()
@@ -543,22 +529,22 @@ def test_unmanaged_legacy_aggregate_checkout_symlink_is_preserved(tmp_path: Path
     target.mkdir(parents=True)
     old_checkout = tmp_path / "old-checkout"
     write_dev_agent_marketplace_marker(old_checkout)
-    (target / "dev-agent-skills").symlink_to(old_checkout, target_is_directory=True)
+    (target / "h-level-model-skills").symlink_to(old_checkout, target_is_directory=True)
 
     result = run_installer(target)
 
     assert result.returncode == 0, result.stderr + result.stdout
     assert "WARNING: skipped unowned legacy aggregate entries:" in result.stdout
-    assert (target / "dev-agent-skills").is_symlink()
-    assert (target / "dev-agent-skills").resolve(strict=True) == old_checkout
-    assert_relative_mirror_link(target, "pm-agent")
+    assert (target / "h-level-model-skills").is_symlink()
+    assert (target / "h-level-model-skills").resolve(strict=True) == old_checkout
+    assert_relative_mirror_link(target, "human-writing")
 
 
 def test_source_checkout_inside_legacy_aggregate_path_is_preserved(
     tmp_path: Path,
 ) -> None:
     target = tmp_path / "skills"
-    checkout = target / "dev-agent-skills"
+    checkout = target / "h-level-model-skills"
     make_minimal_checkout(checkout)
     sentinel = checkout / "local-change.txt"
     sentinel.write_text("keep local checkout", encoding="utf-8")
@@ -580,9 +566,9 @@ def test_source_checkout_inside_legacy_aggregate_path_is_preserved(
     assert "WARNING: skipped unowned legacy aggregate entries:" in result.stdout
     assert sentinel.read_text(encoding="utf-8") == "keep local checkout"
     assert (checkout / ".claude-plugin/marketplace.json").is_file()
-    assert (checkout / "agents/product_manager/skills/pm-agent/SKILL.md").is_file()
+    assert (checkout / "agents/product_manager/skills/human-writing/SKILL.md").is_file()
     assert (target / MIRROR_DIR).is_dir()
-    assert_relative_mirror_link(target, "pm-agent")
+    assert_relative_mirror_link(target, "human-writing")
 
 
 def test_mirror_does_not_contain_plugin_manifests(tmp_path: Path) -> None:
@@ -602,70 +588,70 @@ def test_dot_prefixed_mirror_is_not_scanned_as_extra_skill_root(tmp_path: Path) 
     result = run_installer(target)
 
     assert result.returncode == 0, result.stderr + result.stdout
-    assert ".dev-agent-skills/agents/product_manager/skills/pm-agent" not in scanned_skill_entries(target)
+    assert ".h-level-model-skills/agents/product_manager/skills/human-writing" not in scanned_skill_entries(target)
     assert len(scanned_skill_entries(target)) == len(marketplace_skill_names())
 
 
-def test_shared_skill_map_reference_is_reachable_inside_mirror_without_rewrite(tmp_path: Path) -> None:
-    target = tmp_path / "skills"
-
-    result = run_installer(target)
-
-    assert result.returncode == 0, result.stderr + result.stdout
-    skill_map = (
-        target
-        / MIRROR_DIR
-        / "agents/product_manager/skills/idea-to-spec/_internal/_shared/skill-map.md"
-    )
-    assert skill_map.is_file()
-    source_map = ROOT / "agents/product_manager/skills/idea-to-spec/_internal/_shared/skill-map.md"
-    assert skill_map.read_text(encoding="utf-8") == source_map.read_text(encoding="utf-8")
-    assert (target / MIRROR_DIR / "agents/engineer/skills/trd-gen/SKILL.md").is_file()
-
-
-def test_generated_shared_contracts_are_reachable_in_mirror(
-    tmp_path: Path,
-) -> None:
-    expected = {
-        "engineer": "engineer-agent",
-        "qa": "qa-agent",
-        "devops": "devops-agent",
-        "security": "security-agent",
-        "docs": "docs-agent",
-    }
+def test_spec_references_are_reachable_inside_mirror_without_rewrite(tmp_path: Path) -> None:
     target = tmp_path / "skills"
     result = run_installer(target)
     assert result.returncode == 0, result.stderr + result.stdout
-
-    for agent, router in expected.items():
-        contract_dir = (
-            target
-            / MIRROR_DIR
-            / f"agents/{agent}/skills/{router}"
-            / "_internal/_generated/shared-contracts"
-        )
-        assert sorted(path.name for path in contract_dir.glob("*.md")) == [
-            "closeout-contract.md",
-            "consumption-contract.md",
-            "handoff-contract.md",
-            "security-escalation.md",
-        ]
+    relative = Path("agents/product_manager/skills/spec-authoring/references/output-conventions.md")
+    assert (target / MIRROR_DIR / relative).read_bytes() == (ROOT / relative).read_bytes()
+    assert (target / "spec-authoring/references/schemas/trd-schema.md").is_file()
 
 
-def test_claude_plugin_copies_keep_generated_contracts_inside_plugin_root(
-    tmp_path: Path,
-) -> None:
+def test_generated_shared_contracts_are_reachable_in_mirror(tmp_path: Path) -> None:
+    import generate_shared_contracts as generator
+    target = tmp_path / "skills"
+    result = run_installer(target)
+    assert result.returncode == 0, result.stderr + result.stdout
+    for path, expected in generator.expected_files(ROOT).items():
+        installed = target / MIRROR_DIR / path.relative_to(ROOT)
+        assert installed.read_text() == expected
+
+
+def test_claude_plugin_copies_keep_skill_references_inside_plugin_root(tmp_path: Path) -> None:
+    import re
     for plugin in marketplace_data()["plugins"]:
-        if plugin["name"] == "pm-agent":
-            continue
         plugin_root = tmp_path / plugin["name"]
         shutil.copytree(ROOT / plugin["source"], plugin_root)
-        router = plugin["name"]
-        generated = (
-            plugin_root
-            / f"skills/{router}/_internal/_generated/shared-contracts"
-        )
-        assert len(list(generated.glob("*.md"))) == 4
+        for source in plugin_root.glob("skills/**/*.md"):
+            if "/assets/" in source.as_posix():
+                continue
+            prose = re.sub(r"(?ms)^```.*?^```[ \t]*$", "", source.read_text())
+            for link in re.findall(r"\[[^\]]+\]\(([^)]+)\)", prose):
+                link = link.split("#", 1)[0]
+                if not link or ":" in link or "{" in link:
+                    continue
+                target = (source.parent / link).resolve()
+                assert target.is_relative_to(plugin_root.resolve()), (source, link)
+                assert target.exists(), (source, link)
+
+
+def test_original_library_installation_is_preserved(tmp_path: Path) -> None:
+    for force in (False, True):
+        target = tmp_path / ("force" if force else "default")
+        original = target / ".dev-agent-skills"
+        original.mkdir(parents=True)
+        marker = original / ".dev-agent-skills-mirror.json"
+        marker.write_text('{"schema":"dev-agent-skills-codex-mirror","version":1}')
+        for name in ("human-writing", "debugger"):
+            skill = original / name
+            skill.mkdir()
+            (skill / "SKILL.md").write_text("original " + name)
+            (target / name).symlink_to(Path(".dev-agent-skills") / name)
+        before = {p.relative_to(original): p.read_bytes() for p in original.rglob("*") if p.is_file()}
+        result = run_installer(target, *(["--force"] if force else []))
+        assert result.returncode == (1 if force else 0), result.stderr
+        assert {p.relative_to(original): p.read_bytes() for p in original.rglob("*") if p.is_file()} == before
+        assert (target / "human-writing").resolve() == original / "human-writing"
+        assert (target / "debugger").resolve() == original / "debugger"
+        if force:
+            assert not (target / MIRROR_DIR).exists()
+        else:
+            assert "skipped: human-writing" in result.stdout
+            assert_relative_mirror_link(target, "spec-authoring")
 
 
 def is_under(link: Path, parent: Path) -> bool:

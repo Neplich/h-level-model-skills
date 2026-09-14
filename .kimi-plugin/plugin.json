@@ -1,24 +1,22 @@
 {
-  "name": "dev-agent-skills",
+  "name": "h-level-model-skills",
   "version": "0.6.7",
-  "description": "On-demand professional capabilities for product, engineering, QA, operations, security, and documentation. The assistant combines relevant knowledge to complete the user-authorized task.",
+  "description": "Reusable assets and task-specific conventions for highly autonomous models. Derived from dev-agent-skills.",
   "keywords": [
     "agent-skills",
     "knowledge-library",
     "marketplace"
   ],
-  "homepage": "https://github.com/Neplich/dev-agent-skills",
+  "homepage": "https://github.com/Neplich/h-level-model-skills",
   "interface": {
-    "displayName": "Dev Agent Skills",
-    "shortDescription": "On-demand product, engineering, QA, operations, security, and documentation knowledge",
+    "displayName": "H-Level Model Skills",
+    "shortDescription": "Reusable assets and conventions for highly autonomous models",
     "developerName": "Neplich",
-    "websiteURL": "https://github.com/Neplich/dev-agent-skills"
+    "websiteURL": "https://github.com/Neplich/h-level-model-skills"
   },
   "skills": [
     "./agents/product_manager/skills/",
-    "./agents/engineer/skills/",
     "./agents/qa/skills/",
-    "./agents/devops/skills/",
     "./agents/security/skills/",
     "./agents/docs/skills/"
   ]

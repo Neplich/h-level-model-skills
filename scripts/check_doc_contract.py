@@ -13,7 +13,7 @@ from check_repository_contract import (
     parse_markdown_frontmatter, repo_root, tracked_files,
 )
 
-# Values from idea-to-spec/_internal/_shared/output-conventions.md.
+# Values from spec-authoring/references/output-conventions.md.
 FORMAL_DOCUMENT_STATUSES = ("Draft", "In Review", "Approved", "Superseded", "Deprecated")
 FORMAL_DOCUMENT_TYPES = {"PRD", "TRD", "ADR", "API", "TEST_SPEC", "DECISIONS"}
 MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")

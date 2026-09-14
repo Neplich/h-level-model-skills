@@ -44,8 +44,8 @@ class DocContractTests(unittest.TestCase):
     def test_formal_status_values_match_authoritative_contract(self):
         checker = load_doc_checker_module()
         source = ROOT / (
-            "agents/product_manager/skills/idea-to-spec/_internal/"
-            "_shared/output-conventions.md"
+            "agents/product_manager/skills/spec-authoring/"
+            "references/output-conventions.md"
         )
         status_line = next(
             line for line in source.read_text().splitlines() if line.startswith("status:") and " | " in line
